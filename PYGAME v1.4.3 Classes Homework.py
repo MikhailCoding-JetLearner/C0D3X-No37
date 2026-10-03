@@ -13,8 +13,8 @@ enemyX = 100
 enemyY = 100
 playerx = 800
 playery = 200
-bulletx = playerx
-bullety = playery
+bulletx = 0
+bullety = 0
 additionals = 0
 up = False
 bullet_hit = pygame.Rect(bulletx, bullety, 20, 60)
@@ -23,9 +23,12 @@ bulleter = []
 def bulletes():
     global bulletx, bullety, up
     screen.blit(bullet, (bulletx, bullety))
-    up = True
+    if up == True and bullety > 0:
+        bullety -= 5
+    else:
+        up = False
 def keys():
-    global playerx, playery
+    global playerx, playery, bulletx, bullety, up
     everykeyz = pygame.key.get_pressed()
     if everykeyz[pygame.K_a]:
         playerx += -2
@@ -35,21 +38,20 @@ def keys():
         playery += -2
     if everykeyz[pygame.K_s]:
         playery -= -2
-    if everykeyz[pygame.K_SPACE]:
-        bulletes()
+    if everykeyz[pygame.K_SPACE] and up == False:
+        bulletx = playerx + 23
+        bullety = playery
+        up = True
 def update():
     keys()
+    bulletes()
 while 1 == 1:
     print(up)
     screen.blit(bg, (0, 0))
     update()
     screen.blit(spaceship_player, (playerx, playery))
-    bulletx = playerx + 23
-    bullety = playery + additionals
-    if bullety >= 0 and up == True:
-        while bullety >= 0:
-            bullety += 1
-    up = False
+
+            
     pygame.display.update()
     for i in pygame.event.get():
         if i.type == pygame.QUIT:
